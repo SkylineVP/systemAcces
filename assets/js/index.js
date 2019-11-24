@@ -1,26 +1,43 @@
-const ROLE =Object.freeze({
-    ADMIN:"ADMIN",
-    MODERATOR:"MODERATOR",
-    USER:"USER",
+const ROLE = Object.freeze({
+    ADMIN: "ADMIN",
+    MODERATOR: "MODERATOR",
+    USER: "USER",
 
 });
-const ACTTION = Object.freeze({
-    CREATE:["ADMIN","USER"],
-    DELETE:["ADMIN"],
-    READ:["ADMIN","USER","MODERATOR"],
-    UPDATE:["MODERATOR"],
+
+//ACTTION?
+//const ACTTION = Object.freeze({
+
+//это очень хорошо, но как мне получить значение сомого действия, а не перечень кому оно доступно
+const ACTION = Object.freeze({
+    CREATE: ["ADMIN", "USER"],
+    DELETE: ["ADMIN"],
+    READ: ["ADMIN", "USER", "MODERATOR"],
+    UPDATE: ["MODERATOR"],
 
 });
-function chekPremission(action,role) {
-    let flag= false;
-     action.forEach(function (value) {
-        if(value==role) flag=true
+
+//chek? Premission?
+//function chekPremission(action,role) {
+function checkPermission(action, role) {
+
+    let flag = false;
+
+    action.forEach(function (value) {
+        //нестрогое равенство и конструкция if без тела (combo x2)
+        //if(value==role) flag=true
+        if (value === role) {
+            return true;
+        }
 
     });
-   return flag;
+
+    return flag;
+
 }
-console.log(chekPremission(ACTTION.CREATE,ROLE.ADMIN));
-console.log(chekPremission(ACTTION.DELETE,ROLE.USER));
-console.log(chekPremission(ACTTION.UPDATE,ROLE.MODERATOR));
+
+console.log(checkPermission(ACTION.CREATE, ROLE.ADMIN));
+console.log(checkPermission(ACTION.DELETE, ROLE.USER));
+console.log(checkPermission(ACTION.UPDATE, ROLE.MODERATOR));
     
 
