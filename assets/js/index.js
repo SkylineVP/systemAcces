@@ -1,26 +1,72 @@
-const ROLE =Object.freeze({
-    ADMIN:"ADMIN",
-    MODERATOR:"MODERATOR",
-    USER:"USER",
+//роли в объекте чтобы значения брать
+const ROLE = Object.freeze({
+
+    ADMIN: "ADMIN",
+    MODERATOR: "MODERATOR",
+    USER: "USER",
 
 });
-const ACTTION = Object.freeze({
-    CREATE:["ADMIN","USER"],
-    DELETE:["ADMIN"],
-    READ:["ADMIN","USER","MODERATOR"],
-    UPDATE:["MODERATOR"],
+
+//действия в объекте чтобы значения брать.
+//Что-то вроде enum в C# и C++
+const ACTION = Object.freeze({
+
+    CREATE: "CREATE",
+    READ: "READ",
+    UPDATE: "UPDATE",
+    DELETE: "DELETE",
 
 });
-function chekPremission(action,role) {
-    let flag= false;
-     action.forEach(function (value) {
-        if(value==role) flag=true
 
-    });
-   return flag;
+
+//словарь ключ : значение
+// ключ - действие (ACTION): значение - список ролей, которые это действие могут выполнять
+const permissionMap = new Map();
+
+permissionMap.set(
+    ACTION.CREATE, [
+        ROLE.ADMIN,
+        ROLE.USER,
+    ]
+);
+
+permissionMap.set(
+    ACTION.READ,
+    [
+        ROLE.ADMIN,
+        ROLE.MODERATOR,
+        ROLE.USER,
+    ]
+);
+
+permissionMap.set(
+    ACTION.UPDATE,
+    [
+        ROLE.MODERATOR,
+    ]
+);
+
+permissionMap.set(
+    ACTION.DELETE,
+    [
+        ROLE.ADMIN
+    ]
+);
+
+
+function checkPermission(action, role) {
+
+    if (permissionMap.has(action)) {
+
+        return permissionMap.get(action).includes(role);
+
+    }
+    return false;
+
 }
-console.log(chekPremission(ACTTION.CREATE,ROLE.ADMIN));
-console.log(chekPremission(ACTTION.DELETE,ROLE.USER));
-console.log(chekPremission(ACTTION.UPDATE,ROLE.MODERATOR));
+
+console.log(checkPermission(ACTION.CREATE, ROLE.ADMIN));
+console.log(checkPermission(ACTION.DELETE, ROLE.USER));
+console.log(checkPermission(ACTION.UPDATE, ROLE.MODERATOR));
     
 
