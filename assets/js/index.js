@@ -1,3 +1,11 @@
+class User{
+    name;
+    role;
+    static checkPermission(action,role,who,overWhom){
+
+
+    }
+}
 //роли в объекте чтобы значения брать
 const ROLE = Object.freeze({
 
@@ -21,37 +29,65 @@ const ACTION = Object.freeze({
 
 //словарь ключ : значение
 // ключ - действие (ACTION): значение - список ролей, которые это действие могут выполнять
-const permissionMap = new Map();
+const permissionMap = new Map([
+    [ACTION.CREATE,
+    new Map([
+        ROLE.ADMIN, [ROLE.ADMIN, ROLE.USER, ROLE.MODERATOR],
+        ROLE.MODERATOR, [ROLE.USER]
+    ])],
+    [ACTION.READ,
+    new Map([
+        ROLE.ADMIN, [ROLE.ADMIN, ROLE.USER, ROLE.MODERATOR],
+        ROLE.MODERATOR, [ROLE.USER, ROLE.MODERATOR],
+        ROLE.USER, [ROLE.USER, ROLE.MODERATOR]
+    ])],
+    [ACTION.UPDATE,
+    new Map([
+        ROLE.ADMIN, [ROLE.ADMIN, ROLE.USER, ROLE.MODERATOR],
+        ROLE.MODERATOR, [ROLE.MODERATOR]
+    ])],
+    [ACTION.DELETE,
+    new Map([
+        ROLE.ADMIN, [ROLE.ADMIN, ROLE.USER, ROLE.MODERATOR]
+    ])],
 
+]);
+
+
+/*
 permissionMap.set(
-    ACTION.CREATE, [
-        ROLE.ADMIN,
-        ROLE.USER,
-    ]
+    ACTION.CREATE,
+    new Map([
+        ROLE.ADMIN,[ROLE.ADMIN,ROLE.USER,ROLE.MODERATOR],
+        ROLE.MODERATOR,[ROLE.USER],
+    ])
 );
 
 permissionMap.set(
     ACTION.READ,
-    [
-        ROLE.ADMIN,
-        ROLE.MODERATOR,
-        ROLE.USER,
-    ]
+    new Map([
+        ROLE.ADMIN,[ROLE.ADMIN,ROLE.USER,ROLE.MODERATOR],
+        ROLE.MODERATOR,[ROLE.USER,ROLE.MODERATOR],
+        ROLE.USER,[ROLE.USER,ROLE.MODERATOR]
+    ])
 );
 
 permissionMap.set(
     ACTION.UPDATE,
-    [
-        ROLE.MODERATOR,
-    ]
+    new Map([
+        ROLE.ADMIN,[ROLE.ADMIN,ROLE.USER,ROLE.MODERATOR],
+        ROLE.MODERATOR,[ROLE.MODERATOR],
+
+    ])
 );
 
 permissionMap.set(
     ACTION.DELETE,
-    [
-        ROLE.ADMIN
-    ]
+    new Map([
+        ROLE.ADMIN,[ROLE.ADMIN,ROLE.USER,ROLE.MODERATOR],
+    ])
 );
+*/
 
 
 function checkPermission(action, role) {
